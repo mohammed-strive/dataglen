@@ -16,7 +16,7 @@ bp = Blueprint('sensor', __name__, url_prefix='/api/v1/sensordata')
 def storeSensorData(sensorid):
     reading = float(request.form['reading'])
     timestamp = float(request.form['timestamp'])
-    sensorType = str(request.form['sensorType'])
+    sensorType = str(request.form['sensortype'])
 
     date = datetime.fromtimestamp(timestamp)
     isotime = date.isoformat();
@@ -24,7 +24,7 @@ def storeSensorData(sensorid):
     db = get_db()
     cur = db.cursor()
     cur.execute(
-        'INSERT INTO data(sensorid, reading, timestamp, sensorType)'
+        'INSERT INTO data(sensorid, reading, timestamp, sensortype)'
         'VALUES (?, ?, ?, ?)',
         (sensorid, reading, isotime, sensorType),
     )
@@ -61,3 +61,4 @@ def getSensorData(sensorid):
     if nxt: results['next'] = nxt
 
     return json.dumps(results)
+

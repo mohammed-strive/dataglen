@@ -25,8 +25,4 @@ def create_app(config=None):
     app.register_blueprint(sensor.bp)
     app.register_blueprint(auth.bp)
 
-    @app.route('/')
-    def hello():
-        return "Hello, DataGlen"
-    
     return app

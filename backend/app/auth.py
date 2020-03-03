@@ -38,10 +38,10 @@ def authorize():
 @basicauth.verify_password
 def verify_password(username, password):
     db = get_db()
-    user = db.execute(
-        'SELECT * FROM user WHERE username = ?',
+    user = db.cursor().execute(
+        'SELECT USERNAME, PASSWORD FROM user WHERE username = ?',
         (username,),
     ).fetchone()
-    if user and check_password_hash(user['password']):
+    if user and check_password_hash(user[1], password):
         return True
     return False
