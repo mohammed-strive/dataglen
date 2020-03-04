@@ -13,6 +13,16 @@ export default class Table extends React.Component {
       ],
     };
   }
+  
+  componentWillMount() {
+    fetchData(this.props.sensorid).then(
+      (response) => {
+        this.setState({
+          data: response.data,
+        });
+      }
+    );
+  }
 
   getTabularData() {
     return this.state.data.map((row) => {
@@ -46,4 +56,22 @@ export default class Table extends React.Component {
       </div>
     );
   }
+}
+
+const fetchData = (sensorid) => {
+  return new Promise((resolve, reject) => {
+    const url = `http://localhost:5000/api/v1/sensordata/${sensorid}`;
+    const request = new XMLHttpRequest();
+    // Never do this.....
+    request.setRequestHeader('Authorization', `Basic: ${atob('sjaffer:password')}`);
+    request.open('GET', url);
+    request.onload = () => {
+      (request.status === 200
+        ? resolve(JSON.parse(request.response))
+        : reject(Error(request.statusText))
+      )
+    };
+    request.onerror = (err) => reject(err);
+    request.send();
+  });
 }
